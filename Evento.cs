@@ -37,9 +37,7 @@ namespace csharp_gestore_eventi
             get { return data; }
 
             set
-            {
-
-                // Assegno il valore della data solo se passa i vari controlli
+            { 
                 data = value;
             }
         

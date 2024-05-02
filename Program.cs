@@ -183,6 +183,10 @@ namespace csharp_gestore_eventi
                     Console.WriteLine($"\nEventi in data {dataRichiesta.ToString("dd/MM/yyyy")}:\n{ProgrammaEventi.StampaEventi(programmaEventi.TrovaEventiPerData(dataRichiesta))}");
 
                 }
+                catch (FormatException)
+                {
+                    Console.WriteLine("La data non è nel formato accettabile (dd/MM/yyyy)");
+                }
 
                 catch (Exception ex)
                 {
