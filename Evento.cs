@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace csharp_gestore_eventi
                 //controllo che il valore passato al titolo non sia null o consista in soli spazzi vuoti
                 if (string.IsNullOrWhiteSpace(value))
                 {
+                    Console.WriteLine();
                     //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
                     throw new ArgumentException("Il titolo non può essere vuoto.");
                 }
@@ -42,15 +44,25 @@ namespace csharp_gestore_eventi
 
             set
             {
-
-                //controllo che la data inserita non sia precedente a quella attuale
-                if (value < DateTime.Now)
+                try
                 {
-                    //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
-                    throw new ArgumentException("La data non può essere precedente a quella attuale");
-                }
+                    
+                    // Controllo che la data inserita non sia precedente a quella attuale
+                    if (value < DateTime.Now)
+                    {
+                        Console.WriteLine();
+                        // Sollevo un'eccezione se la data è precedente a quella attuale
+                        throw new ArgumentException("La data non può essere precedente a quella attuale");
+                    }
 
-                data = value;
+                    // Assegno il valore della data solo se passa il controllo sopra
+                    data = value;
+                }
+                catch (FormatException)
+                {
+                    // Gestisco l'eccezione FormatException
+                    throw new FormatException("La data non è in un formato accettabile (dd/MM/yyyy)");
+                }
             }
         }
 
@@ -64,6 +76,7 @@ namespace csharp_gestore_eventi
                 //controllo che la data inserita non sia precedente a quella attuale
                 if (value < 0)
                 {
+                    Console.WriteLine();
                     //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
                     throw new ArgumentException("La capienza massima non può essere minore di zero");
                 }
@@ -82,12 +95,12 @@ namespace csharp_gestore_eventi
 
 
         //Implemento il costruttore impostando a 0 la capienza qualora non sia stata definita dall'utente
-        public Evento(string titolo, DateTime data, int capienza = 0)
+        public Evento(string titolo, string data, int capienza = 0)
         {
 
             this.Titolo = titolo;
 
-            this.Data = data;
+            this.Data = DateTime.ParseExact(data, "dd/MM/yyyy", null);
 
             this.Capienza = capienza;
 
@@ -102,6 +115,7 @@ namespace csharp_gestore_eventi
             //se nel momento della prenotazione dei posti, la data risulta superiore alla data dell'evento stesso
             if(DateTime.Now > data)
             {
+                Console.WriteLine();
                 //sollevo la specifica eccezione "modificata" di quando si tenta di eseguire un'operazione che non è valida nel contesto corrente
                 throw new InvalidOperationException("Impossibile prenotare posti per un evento passato.");
 
@@ -110,6 +124,7 @@ namespace csharp_gestore_eventi
             //se il numero delle prenotazioni risulta minore o uguale a zero
             if (numPrenotazioni <= 0)
             {
+                Console.WriteLine();
                 //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
                 throw new ArgumentException("Numero di posti prenotati non può essere minore o uguale a zero");
 
@@ -121,6 +136,7 @@ namespace csharp_gestore_eventi
             //se non vi sono più posti disponibili
             if (postiDisponibili < numPrenotazioni)
             {
+                Console.WriteLine();
                 //sollevo la specifica eccezione "modificata" di quando si tenta di eseguire un'operazione che non è valida nel contesto corrente
                 throw new InvalidOperationException("Non ci sono abbastanza posti disponibili per il numero di prenotazioni richieste.");
 
@@ -137,6 +153,7 @@ namespace csharp_gestore_eventi
             //se nel momento della disdetta dei posti, la data risulta superiore alla data dell'evento stesso
             if (DateTime.Now > data)
             {
+                Console.WriteLine();
                 //sollevo la specifica eccezione "modificata" di quando si tenta di eseguire un'operazione che non è valida nel contesto corrente
                 throw new InvalidOperationException("Impossibile disdire posti per un evento passato.");
             }
@@ -144,6 +161,7 @@ namespace csharp_gestore_eventi
             //se il numero delle disdette risulta minore o uguale a zero
             if (numDisdette <= 0)
             {
+                Console.WriteLine();
                 //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
                 throw new ArgumentException("Numero di posti da disdire non può essere minore o uguale a zero");
             }
@@ -151,9 +169,10 @@ namespace csharp_gestore_eventi
             //se il numero delle disdette risulta maggiore del numero di prenotazioni
             if (postiPrenotati < numDisdette)
             {
+                Console.WriteLine();
                 //sollevo la specifica eccezione "modificata" di quando si tenta di eseguire un'operazione che non è valida nel contesto corrente
                 throw new InvalidOperationException("Non ci sono abbastanza posti prenotati da disdire.");
-
+                
             }
 
 
