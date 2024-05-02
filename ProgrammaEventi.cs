@@ -38,14 +38,10 @@ namespace csharp_gestore_eventi
 
             foreach (Evento evento in eventi)
             {
-                //Effettua il parsing (conversione) della stringa data in un oggetto DateTime e confronto il valore con la data
-                //
-                //DateTime dataEvento = DateTime.ParseExact(evento.Data, "dd/MM/yyyy HH:mm:ss", null);
 
                 DateTime dataEvento;
                 //Effettua il parsing (conversione) della stringa data in un oggetto DateTime e confronto il valore con la data
                 DateTime.TryParseExact(evento.Data, "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out dataEvento);
-
 
                 if (dataEvento == data)
                 {
@@ -57,7 +53,7 @@ namespace csharp_gestore_eventi
             return eventiNellaData;
         }
 
-        //funzione che restituisce a video una stringa formattatta con data e titolo evento
+        //funzione che restituisce a video una stringa formattatta con data,titolo e numero posti disponibili
         public static string StampaEventi(List<Evento> listaEventi)
         {
             string result = "";
