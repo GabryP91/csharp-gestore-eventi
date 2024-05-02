@@ -95,6 +95,7 @@ Una volta compilati tutti gli eventi:
 */
 
 using System.ComponentModel;
+using System.Data;
 using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -214,7 +215,9 @@ namespace csharp_gestore_eventi
                         //acquisisco data converte la stringa letta in un oggetto DateTime tramite "ParseExact" che richiede il formato esatto (dd/MM/yyyy) da tastiera
                         Console.Write("Data (formato dd/MM/yyyy): ");
 
-                        string data = Console.ReadLine();
+                        DateTime data;
+
+                        DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out data);
 
                         //acquisisco capienza per tale evento
                         Console.Write("Numero di posti disponibili: ");
@@ -305,6 +308,11 @@ namespace csharp_gestore_eventi
                         programmaEventi.AddEvento(nuovoEvento);
 
                     }
+
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("La data non è nel formato accettabile (dd/MM/yyyy)");
+            }
 
                     catch (Exception ex)
                     {

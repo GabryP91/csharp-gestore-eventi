@@ -6,9 +6,27 @@ using System.Threading.Tasks;
 
 namespace csharp_gestore_eventi
 {
-    internal class Eccezioni
+    public class Eccezzioni : Exception
     {
-        // gestisco eccezioni generiche
+        public Eccezzioni() : base() { }
 
+        public Eccezzioni(string message) : base(message) { }
+
+        public Eccezzioni(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    public class DataPassataException : Eccezzioni
+    {
+        public DataPassataException() : base("Impossibile creare un evento con una data passata.") { }
+    }
+
+    public class TitoloVuotoException : Eccezzioni
+    {
+        public TitoloVuotoException() : base("Il titolo dell'evento non può essere vuoto.") { }
+    }
+
+    public class CapienzaNonValidaException : Eccezzioni
+    {
+        public CapienzaNonValidaException() : base("La capienza massima deve essere un numero positivo.") { }
     }
 }

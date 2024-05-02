@@ -39,11 +39,7 @@ namespace csharp_gestore_eventi
             foreach (Evento evento in eventi)
             {
 
-                DateTime dataEvento;
-                //Effettua il parsing (conversione) della stringa data in un oggetto DateTime e confronto il valore con la data
-                DateTime.TryParseExact(evento.Data, "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out dataEvento);
-
-                if (dataEvento == data)
+                if (evento.Data == data)
                 {
                     eventiNellaData.Add(evento);
                 }
@@ -59,7 +55,7 @@ namespace csharp_gestore_eventi
             string result = "";
             foreach (Evento evento in listaEventi)
             {
-                result += $"{evento.Data} - {evento.Titolo} - Numero Posti disponibili:{evento.Capienza}\n";
+                result += $"{evento.Data.ToString("dd/MM/yyyy")} - {evento.Titolo} - Numero Posti disponibili:{evento.Capienza}\n";
             }
             return result;
         }

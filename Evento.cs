@@ -33,45 +33,36 @@ namespace csharp_gestore_eventi
                     Console.WriteLine();
                     //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
                     throw new ArgumentException("Il titolo non può essere vuoto.");
+
+                    
                 }
 
                 titolo = value; 
             }
         }
 
-        public string Data
+        public DateTime Data
         {
-            // restituisco la data convertita in stringa
-            get { return data.ToString("dd/MM/yyyy"); }
+            // restituisco la data 
+            get { return data; }
 
             set
             {
-               //Creo variabile di dipo DateTime 
-               DateTime dataUser;
 
-                //Effettua il parsing (conversione) della stringa data in un oggetto DateTime
-                if (DateTime.TryParseExact(value, "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out dataUser))
+                // Controllo che la data inserita non sia precedente a quella attuale
+                if (value < DateTime.Now)
                 {
-                  // Controllo che la data inserita non sia precedente a quella attuale
-                  if (dataUser < DateTime.Now)
-                  {
-                      Console.WriteLine();
-                      // Sollevo un'eccezione se la data è precedente a quella attuale
-                      throw new ArgumentException("La data non può essere precedente a quella attuale");
-                  }
-
-
-                  // Assegno il valore della data solo se passa i vari controlli
-                  data = dataUser;
+                    Console.WriteLine();
+                    // Sollevo un'eccezione se la data è precedente a quella attuale
+                    throw new ArgumentException("La data non può essere precedente a quella attuale");
                 }
 
-                else
-                {
-                   // Gestisci manualmente l'eccezione FormatException
-                   throw new FormatException("La data non è nel formato accettabile (dd/MM/yyyy)");
-                }
 
+                // Assegno il valore della data solo se passa i vari controlli
+                data = value;
             }
+        
+
         }
 
         public int Capienza
@@ -102,7 +93,7 @@ namespace csharp_gestore_eventi
         //***********METODI***************************
 
         //Implemento il costruttore impostando a 0 la capienza qualora non sia stata definita dall'utente
-        public Evento(string titolo, string data, int capienza = 0)
+        public Evento(string titolo, DateTime data, int capienza = 0)
         {
 
             this.Titolo = titolo;
