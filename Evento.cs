@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -38,31 +39,38 @@ namespace csharp_gestore_eventi
             }
         }
 
-        public DateTime Data
+        public string Data
         {
-            get { return data; }
+            // restituisco la data convertita in stringa
+            get { return data.ToString(); }
 
             set
             {
-                try
-                {
-                    
-                    // Controllo che la data inserita non sia precedente a quella attuale
-                    if (value < DateTime.Now)
-                    {
-                        Console.WriteLine();
-                        // Sollevo un'eccezione se la data è precedente a quella attuale
-                        throw new ArgumentException("La data non può essere precedente a quella attuale");
-                    }
+               //Creo variabile di dipo DateTime 
+               DateTime dataUser;
 
-                    // Assegno il valore della data solo se passa il controllo sopra
-                    data = value;
-                }
-                catch (FormatException)
+                //Effettua il parsing (conversione) della stringa data in un oggetto DateTime
+                if (DateTime.TryParseExact(value, "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out dataUser))
                 {
-                    // Gestisco l'eccezione FormatException
-                    throw new FormatException("La data non è in un formato accettabile (dd/MM/yyyy)");
+                  // Controllo che la data inserita non sia precedente a quella attuale
+                  if (dataUser < DateTime.Now)
+                  {
+                      Console.WriteLine();
+                      // Sollevo un'eccezione se la data è precedente a quella attuale
+                      throw new ArgumentException("La data non può essere precedente a quella attuale");
+                  }
+
+
+                  // Assegno il valore della data solo se passa i vari controlli
+                  data = dataUser;
                 }
+
+                else
+                {
+                   // Gestisci manualmente l'eccezione FormatException
+                   throw new FormatException("La data non è nel formato accettabile (dd/MM/yyyy)");
+                }
+
             }
         }
 
@@ -93,14 +101,13 @@ namespace csharp_gestore_eventi
 
         //***********METODI***************************
 
-
         //Implemento il costruttore impostando a 0 la capienza qualora non sia stata definita dall'utente
         public Evento(string titolo, string data, int capienza = 0)
         {
 
             this.Titolo = titolo;
 
-            this.Data = DateTime.ParseExact(data, "dd/MM/yyyy", null);
+            this.Data = data;
 
             this.Capienza = capienza;
 
