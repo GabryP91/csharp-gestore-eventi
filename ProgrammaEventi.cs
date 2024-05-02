@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +39,14 @@ namespace csharp_gestore_eventi
             foreach (Evento evento in eventi)
             {
                 //Effettua il parsing (conversione) della stringa data in un oggetto DateTime e confronto il valore con la data
-                DateTime dataEvento = DateTime.ParseExact(evento.Data, "dd/MM/yyyy", null);
-                
+                //
+                //DateTime dataEvento = DateTime.ParseExact(evento.Data, "dd/MM/yyyy HH:mm:ss", null);
+
+                DateTime dataEvento;
+                //Effettua il parsing (conversione) della stringa data in un oggetto DateTime e confronto il valore con la data
+                DateTime.TryParseExact(evento.Data, "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out dataEvento);
+
+
                 if (dataEvento == data)
                 {
                     eventiNellaData.Add(evento);
@@ -56,7 +63,7 @@ namespace csharp_gestore_eventi
             string result = "";
             foreach (Evento evento in listaEventi)
             {
-                result += $"{evento.Data} - {evento.Titolo}\n";
+                result += $"{evento.Data} - {evento.Titolo} - Numero Posti disponibili:{evento.Capienza}\n";
             }
             return result;
         }

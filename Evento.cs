@@ -42,7 +42,7 @@ namespace csharp_gestore_eventi
         public string Data
         {
             // restituisco la data convertita in stringa
-            get { return data.ToString(); }
+            get { return data.ToString("dd/MM/yyyy"); }
 
             set
             {

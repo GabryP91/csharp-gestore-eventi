@@ -95,6 +95,7 @@ Una volta compilati tutti gli eventi:
 */
 
 using System.ComponentModel;
+using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace csharp_gestore_eventi
@@ -167,11 +168,16 @@ namespace csharp_gestore_eventi
 
                 }
 
+                //controllo nel caso vsi passi una data sbagliata 
                 try
                 {
                     // Chiedere all'utente una data e stampare gli eventi in quella data
                     Console.Write("\nInserisci una data per visualizzare gli eventi (formato dd/MM/yyyy): ");
-                    DateTime dataRichiesta = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+              
+                    DateTime dataRichiesta;
+                    //Effettua il parsing (conversione) della stringa data in un oggetto DateTime e confronto il valore con la data
+                    DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out dataRichiesta);
+
 
                     Console.WriteLine($"\nEventi in data {dataRichiesta.ToString("dd/MM/yyyy")}:\n{ProgrammaEventi.StampaEventi(programmaEventi.TrovaEventiPerData(dataRichiesta))}");
 
