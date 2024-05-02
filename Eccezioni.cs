@@ -12,7 +12,6 @@ namespace csharp_gestore_eventi
 
         public Eccezzioni(string message) : base(message) { }
 
-        public Eccezzioni(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class DataPassataException : Eccezzioni

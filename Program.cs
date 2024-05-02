@@ -208,116 +208,144 @@ namespace csharp_gestore_eventi
 
                         Console.WriteLine($"\n\n*********INSERIRE EVENTO N°{numEvent + 1}:*********");
 
-                        //acquisisco titolo
-                        Console.Write("Titolo: ");
-                        string titolo = Console.ReadLine();
+                            //acquisisco titolo
+                            Console.Write("Titolo: ");
+                            string titolo = Console.ReadLine();
 
-                        //acquisisco data converte la stringa letta in un oggetto DateTime tramite "ParseExact" che richiede il formato esatto (dd/MM/yyyy) da tastiera
-                        Console.Write("Data (formato dd/MM/yyyy): ");
-
-                        DateTime data;
-
-                        DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out data);
-
-                        //acquisisco capienza per tale evento
-                        Console.Write("Numero di posti disponibili: ");
-                        int capienza = int.Parse(Console.ReadLine());
-
-                        // Creazione dell'evento con i parametri passati dall'utente
-                        Evento nuovoEvento = new Evento(titolo, data, capienza);
-
-                        //variabile per continuare a inserire nuove prenotazioni
-                        bool continuaPrenotazioni = true;
-
-                        //ciclo while per continuare a inserire nuove prenotazioni
-                        while (continuaPrenotazioni)
-                        {
-                            Console.Write("\nVuoi prenotare dei posti per quell'evento? (s/n): ");
-
-                            //legge una riga di testo inserita dall'utente tramite la console e la converte in una stringa in minuscolo.
-                            string risposta2 = Console.ReadLine().ToLower();
-
-                            if (risposta2 == "s")
+                            if(string.IsNullOrWhiteSpace(titolo))
                             {
-                                Console.Write("\nQuanti posti vuoi prenotare? ");
-
-                                int postiDaPrenotare = int.Parse(Console.ReadLine());
-
-                                //aggiungo posti valore selezionato a numero di posti già prenotati
-                                nuovoEvento.PrenotaPosti(postiDaPrenotare);
-
-                                //stampo totale posti prenotati (aggiornato)
-                                Console.WriteLine($"\nPosti prenotati: {nuovoEvento.Prenotati}");
-
-                                //stampo capienza massima (aggiornata)
-                                Console.WriteLine($"\nPosti disponibili: {nuovoEvento.Capienza - nuovoEvento.Prenotati}");
+                                Console.WriteLine();
+                                //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
+                                throw new TitoloVuotoException();
 
                             }
+                        
+                            //acquisisco data converte la stringa letta in un oggetto DateTime tramite "ParseExact" che richiede il formato esatto (dd/MM/yyyy) da tastiera
+                            Console.Write("Data (formato dd/MM/yyyy): ");
 
-                            else if (risposta2 == "n")
+                            DateTime data;
+
+                            DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out data);
+
+                            // Controllo che la data inserita non sia precedente a quella attuale
+                            if (data < DateTime.Now)
                             {
-                                continuaPrenotazioni = false;
+                                Console.WriteLine();
+
+                                // Sollevo un'eccezione custom se il titolo è vuoto
+                                throw new DataPassataException();
+
+                            }
+                        
+                        
+                            //acquisisco capienza per tale evento
+                            Console.Write("Numero di posti disponibili: ");
+                            int capienza = int.Parse(Console.ReadLine());
+
+                            //controllo che la data inserita non sia precedente a quella attuale
+                            if (capienza < 0)
+                            {
+                                Console.WriteLine();
+
+                                //Sollevo un'eccezione custom se la capienza massima è minore di zero
+                                throw new CapienzaNonValidaException();
                             }
 
-                            else
+                            // Creazione dell'evento con i parametri passati dall'utente
+                            Evento nuovoEvento = new Evento(titolo, data, capienza);
+
+                            //variabile per continuare a inserire nuove prenotazioni
+                            bool continuaPrenotazioni = true;
+
+                            //ciclo while per continuare a inserire nuove prenotazioni
+                            while (continuaPrenotazioni)
                             {
-                                Console.WriteLine("Risposta non valida. Digitare s oppure n.");
+                                Console.Write("\nVuoi prenotare dei posti per quell'evento? (s/n): ");
+
+                                //legge una riga di testo inserita dall'utente tramite la console e la converte in una stringa in minuscolo.
+                                string risposta2 = Console.ReadLine().ToLower();
+
+                                if (risposta2 == "s")
+                                {
+                                    Console.Write("\nQuanti posti vuoi prenotare? ");
+
+                                    int postiDaPrenotare = int.Parse(Console.ReadLine());
+
+                                    //aggiungo posti valore selezionato a numero di posti già prenotati
+                                    nuovoEvento.PrenotaPosti(postiDaPrenotare);
+
+                                    //stampo totale posti prenotati (aggiornato)
+                                    Console.WriteLine($"\nPosti prenotati: {nuovoEvento.Prenotati}");
+
+                                    //stampo capienza massima (aggiornata)
+                                    Console.WriteLine($"\nPosti disponibili: {nuovoEvento.Capienza - nuovoEvento.Prenotati}");
+
+                                }
+
+                                else if (risposta2 == "n")
+                                {
+                                    continuaPrenotazioni = false;
+                                }
+
+                                else
+                                {
+                                    Console.WriteLine("Risposta non valida. Digitare s oppure n.");
+                                }
                             }
+
+                            // Richiesta di input per disdire posti
+                            bool continuaDisdette = true;
+
+                            //ciclo while per continuare a disdire le prenotazioni del singolo evento
+                            while (continuaDisdette)
+                            {
+                                Console.Write("\nVuoi disdire dei posti per quell'evento? (s/n): ");
+
+                                //legge una riga di testo inserita dall'utente tramite la console e la converte in una stringa in minuscolo.
+                                string risposta2 = Console.ReadLine().ToLower();
+
+                                if (risposta2 == "s")
+                                {
+                                    Console.Write("Quanti posti vuoi disdire? ");
+
+                                    int postiDaDisdire = int.Parse(Console.ReadLine());
+
+                                    //disdico tot numero posti 
+                                    nuovoEvento.DisdiciPosti(postiDaDisdire);
+
+                                    //stampo totale posti prenotati (aggiornato)
+                                    Console.WriteLine($"\nPosti prenotati: {nuovoEvento.Prenotati}");
+
+                                    //stampo capienza massima (aggiornata)
+                                    Console.WriteLine($"\nPosti disponibili: {nuovoEvento.Capienza - nuovoEvento.Prenotati}");
+
+                                }
+
+                                else if (risposta2 == "n")
+                                {
+                                    continuaDisdette = false;
+                                }
+
+                                else
+                                {
+                                    Console.WriteLine("Risposta non valida. Digitare s oppure n.");
+                                }
+                            }
+
+                            //aggiungo l'evento al mio programmaEventi
+                            programmaEventi.AddEvento(nuovoEvento);
+
                         }
 
-                        // Richiesta di input per disdire posti
-                        bool continuaDisdette = true;
-
-                        //ciclo while per continuare a disdire le prenotazioni del singolo evento
-                        while (continuaDisdette)
+                        catch (FormatException)
                         {
-                            Console.Write("\nVuoi disdire dei posti per quell'evento? (s/n): ");
-
-                            //legge una riga di testo inserita dall'utente tramite la console e la converte in una stringa in minuscolo.
-                            string risposta2 = Console.ReadLine().ToLower();
-
-                            if (risposta2 == "s")
-                            {
-                                Console.Write("Quanti posti vuoi disdire? ");
-
-                                int postiDaDisdire = int.Parse(Console.ReadLine());
-
-                                //disdico tot numero posti 
-                                nuovoEvento.DisdiciPosti(postiDaDisdire);
-
-                                //stampo totale posti prenotati (aggiornato)
-                                Console.WriteLine($"\nPosti prenotati: {nuovoEvento.Prenotati}");
-
-                                //stampo capienza massima (aggiornata)
-                                Console.WriteLine($"\nPosti disponibili: {nuovoEvento.Capienza - nuovoEvento.Prenotati}");
-
-                            }
-
-                            else if (risposta2 == "n")
-                            {
-                                continuaDisdette = false;
-                            }
-
-                            else
-                            {
-                                Console.WriteLine("Risposta non valida. Digitare s oppure n.");
-                            }
+                            Console.WriteLine("La data non è nel formato accettabile (dd/MM/yyyy)");
                         }
 
-                        //aggiungo l'evento al mio programmaEventi
-                        programmaEventi.AddEvento(nuovoEvento);
-
-                    }
-
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("La data non è nel formato accettabile (dd/MM/yyyy)");
-            }
-
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Si è verificato un errore: {ex.Message}");
-                    }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Si è verificato un errore: {ex.Message}");
+                        }
                 
         }
     }

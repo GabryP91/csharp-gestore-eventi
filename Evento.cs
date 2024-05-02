@@ -27,16 +27,6 @@ namespace csharp_gestore_eventi
 
             set {
 
-                //controllo che il valore passato al titolo non sia null o consista in soli spazzi vuoti
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    Console.WriteLine();
-                    //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
-                    throw new ArgumentException("Il titolo non può essere vuoto.");
-
-                    
-                }
-
                 titolo = value; 
             }
         }
@@ -48,15 +38,6 @@ namespace csharp_gestore_eventi
 
             set
             {
-
-                // Controllo che la data inserita non sia precedente a quella attuale
-                if (value < DateTime.Now)
-                {
-                    Console.WriteLine();
-                    // Sollevo un'eccezione se la data è precedente a quella attuale
-                    throw new ArgumentException("La data non può essere precedente a quella attuale");
-                }
-
 
                 // Assegno il valore della data solo se passa i vari controlli
                 data = value;
@@ -71,15 +52,6 @@ namespace csharp_gestore_eventi
 
             private set
             {
-
-                //controllo che la data inserita non sia precedente a quella attuale
-                if (value < 0)
-                {
-                    Console.WriteLine();
-                    //sollevo la specifica eccezione "modificata" di quando viene passato un argomento non valido
-                    throw new ArgumentException("La capienza massima non può essere minore di zero");
-                }
-
                 capienza = value;
             }
         }
@@ -114,8 +86,9 @@ namespace csharp_gestore_eventi
             if(DateTime.Now > data)
             {
                 Console.WriteLine();
-                //sollevo la specifica eccezione "modificata" di quando si tenta di eseguire un'operazione che non è valida nel contesto corrente
-                throw new InvalidOperationException("Impossibile prenotare posti per un evento passato.");
+
+                //Sollevo un'eccezione custom se la prenotazione riguarda una data passata 
+                throw new DataPassataException();
 
             }
 
