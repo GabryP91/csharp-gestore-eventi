@@ -1,6 +1,6 @@
 # csharp-gestore-eventi
 
-                                                                                                            **Contesto e problema da risolvere in C#:**  
+**Contesto e problema da risolvere in C#:**  
                                                                                                             
 Immaginate di lavorare in una software house, che ha diversi clienti. Vi è stato commissionato da parte della vostra azienda la creazione di un gestionale eventi per eventi come concerti, conferenze, spettacoli,… per un suo cliente. Il cliente necessita di un semplice programma senza interfaccia grafica (ossia che venga eseguito in console o terminale) che si occupa di:
 -	Memorizzare e tenere traccia di tutti gli eventi in futuro che ha programmato
