@@ -39,7 +39,7 @@ namespace csharp_gestore_eventi
             foreach (Evento evento in eventi)
             {
 
-                if (evento.Data == data)
+                if (evento.Data.Date == data.Date)
                 {
                     eventiNellaData.Add(evento);
                 }
