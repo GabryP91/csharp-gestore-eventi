@@ -169,24 +169,25 @@ namespace csharp_gestore_eventi
 
                 }
 
-                //controllo nel caso vsi passi una data sbagliata 
+                //controllo nel caso l'utente passi una data sbagliata 
                 try
                 {
                     // Chiedere all'utente una data e stampare gli eventi in quella data
                     Console.Write("\nInserisci una data per visualizzare gli eventi (formato dd/MM/yyyy): ");
               
                     DateTime dataRichiesta;
-                    //Effettua il parsing (conversione) della stringa data in un oggetto DateTime e confronto il valore con la data
-                    DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out dataRichiesta);
-
-
-                    Console.WriteLine($"\nEventi in data {dataRichiesta.ToString("dd/MM/yyyy")}:\n{ProgrammaEventi.StampaEventi(programmaEventi.TrovaEventiPerData(dataRichiesta))}");
-
+                    if (DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataRichiesta))
+                    {
+                        Console.WriteLine($"\nEventi in data {dataRichiesta.ToString("dd/MM/yyyy")}:\n{ProgrammaEventi.StampaEventi(programmaEventi.TrovaEventiPerData(dataRichiesta))}");
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        // Sollevo un'eccezione custom se la data è precedente a quella odierna
+                        throw new DataOutException();
+                    }
                 }
-                catch (FormatException)
-                {
-                    Console.WriteLine("La data non è nel formato accettabile (dd/MM/yyyy)");
-                }
+                
 
                 catch (Exception ex)
                 {
@@ -229,23 +230,32 @@ namespace csharp_gestore_eventi
 
                             DateTime data;
 
-                            DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out data);
+                            if (DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out data))
+                                {
+                                // Controllo che la data inserita non sia precedente a quella attuale
+                                if (data < DateTime.Now)
+                                {
+                                    Console.WriteLine();
 
-                            Console.WriteLine(data);
+                                    // Sollevo un'eccezione custom se la data è precedente a quella odierna
+                                    throw new DataPassataException();
 
-                            // Controllo che la data inserita non sia precedente a quella attuale
-                            if (data < DateTime.Now)
+                                }
+                            }
+
+                            else
                             {
                                 Console.WriteLine();
-
                                 // Sollevo un'eccezione custom se la data è precedente a quella odierna
-                                throw new DataPassataException();
+                                throw new DataOutException();
 
                             }
-                        
-                        
-                            //acquisisco capienza per tale evento
-                            Console.Write("Numero di posti disponibili: ");
+
+
+
+
+                //acquisisco capienza per tale evento
+                Console.Write("Numero di posti disponibili: ");
                             int capienza = int.Parse(Console.ReadLine());
 
                             //controllo che la data inserita non sia precedente a quella attuale
@@ -341,11 +351,6 @@ namespace csharp_gestore_eventi
                             //aggiungo l'evento al mio programmaEventi
                             programmaEventi.AddEvento(nuovoEvento);
 
-                        }
-
-                        catch (FormatException)
-                        {
-                            Console.WriteLine("La data non è nel formato accettabile (dd/MM/yyyy)");
                         }
 
                         catch (Exception ex)
