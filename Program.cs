@@ -231,12 +231,14 @@ namespace csharp_gestore_eventi
 
                             DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out data);
 
+                            Console.WriteLine(data);
+
                             // Controllo che la data inserita non sia precedente a quella attuale
                             if (data < DateTime.Now)
                             {
                                 Console.WriteLine();
 
-                                // Sollevo un'eccezione custom se il titolo è vuoto
+                                // Sollevo un'eccezione custom se la data è precedente a quella odierna
                                 throw new DataPassataException();
 
                             }
