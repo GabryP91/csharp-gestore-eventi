@@ -19,6 +19,11 @@ namespace csharp_gestore_eventi
         public DataPassataException() : base("Impossibile creare un evento con una data passata.") { }
     }
 
+    public class FindDataPassataException : Eccezzioni
+    {
+        public FindDataPassataException() : base("La data passata è inferiore alla data corrente.") { }
+    }
+
     public class DataOutException : Eccezzioni
     {
         public DataOutException() : base("La data non è nel formato accettabile (dd/MM/yyyy)") { }

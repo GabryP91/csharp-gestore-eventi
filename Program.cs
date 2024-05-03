@@ -184,7 +184,7 @@ namespace csharp_gestore_eventi
                             Console.WriteLine();
 
                             // Sollevo un'eccezione custom se la data è precedente a quella odierna
-                            throw new DataPassataException();
+                            throw new FindDataPassataException();
 
                         }
 
