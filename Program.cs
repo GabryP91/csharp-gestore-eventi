@@ -178,12 +178,22 @@ namespace csharp_gestore_eventi
                     DateTime dataRichiesta;
                     if (DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataRichiesta))
                     {
-                        Console.WriteLine($"\nEventi in data {dataRichiesta.ToString("dd/MM/yyyy")}:\n{ProgrammaEventi.StampaEventi(programmaEventi.TrovaEventiPerData(dataRichiesta))}");
+                        // Controllo che la data inserita non sia precedente a quella attuale
+                        if (dataRichiesta < DateTime.Now)
+                        {
+                            Console.WriteLine();
+
+                            // Sollevo un'eccezione custom se la data è precedente a quella odierna
+                            throw new DataPassataException();
+
+                        }
+
+                        else Console.WriteLine($"\nEventi in data {dataRichiesta.ToString("dd/MM/yyyy")}:\n{ProgrammaEventi.StampaEventi(programmaEventi.TrovaEventiPerData(dataRichiesta))}");
                     }
                     else
                     {
                         Console.WriteLine();
-                        // Sollevo un'eccezione custom se la data è precedente a quella odierna
+                        // Sollevo un'eccezione custom se la data è sbagliata
                         throw new DataOutException();
                     }
                 }
@@ -231,7 +241,7 @@ namespace csharp_gestore_eventi
                             DateTime data;
 
                             if (DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", new CultureInfo("it-IT"), DateTimeStyles.None, out data))
-                                {
+                            {
                                 // Controllo che la data inserita non sia precedente a quella attuale
                                 if (data < DateTime.Now)
                                 {
