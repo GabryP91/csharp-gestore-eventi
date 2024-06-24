@@ -10,10 +10,12 @@ namespace csharp_gestore_eventi
 {
     internal class ProgrammaEventi
     {
+        private List<Evento> eventi;
+
         //***********PROPERTIES***************************
         public string Titolo { get; private set; }
 
-        private List<Evento> eventi;
+       
 
         //***********METODI***************************
 
